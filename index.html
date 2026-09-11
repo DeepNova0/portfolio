@@ -1,0 +1,771 @@
+<title>لمى الفايدي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Changa:wght@500;600;700&family=Readex+Pro:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  /* ---------- Tokens : light (observatory paper) ---------- */
+  :root{
+    --bg:#e9ebf4;
+    --bg-raised:#ffffff;
+    --ink:#141728;
+    --ink-soft:#4d5474;
+    --line:rgba(20,23,40,.14);
+    --accent:#2f5fd0;
+    --accent-2:#6a45cf;
+    --metric:#0c8a78;
+    --star:rgba(24,28,52,.55);
+    --neb-a:rgba(120,110,255,.10);
+    --neb-b:rgba(70,140,255,.10);
+    --neb-c:rgba(180,120,255,.07);
+    --glow:rgba(47,95,208,.22);
+    --vignette:rgba(233,235,244,.72);
+  }
+  /* System dark (no explicit choice) */
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#06080f;
+      --bg-raised:#0d1122;
+      --ink:#eef1ff;
+      --ink-soft:#98a0c6;
+      --line:rgba(170,185,255,.14);
+      --accent:#6ea8ff;
+      --accent-2:#b98bff;
+      --metric:#5fe3d0;
+      --star:rgba(234,239,255,.92);
+      --neb-a:rgba(96,58,192,.24);
+      --neb-b:rgba(18,52,122,.30);
+      --neb-c:rgba(150,70,200,.16);
+      --glow:rgba(110,168,255,.34);
+      --vignette:rgba(6,8,15,.78);
+    }
+  }
+  /* Explicit dark choice */
+  :root[data-theme="dark"]{
+    --bg:#06080f;
+    --bg-raised:#0d1122;
+    --ink:#eef1ff;
+    --ink-soft:#98a0c6;
+    --line:rgba(170,185,255,.14);
+    --accent:#6ea8ff;
+    --accent-2:#b98bff;
+    --metric:#5fe3d0;
+    --star:rgba(234,239,255,.92);
+    --neb-a:rgba(96,58,192,.24);
+    --neb-b:rgba(18,52,122,.30);
+    --neb-c:rgba(150,70,200,.16);
+    --glow:rgba(110,168,255,.34);
+    --vignette:rgba(6,8,15,.78);
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Readex Pro","Segoe UI",Tahoma,sans-serif;
+    font-weight:400;
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  #page{
+    position:relative;
+    direction:rtl;
+    overflow-x:clip;
+    min-height:100vh;
+  }
+  /* nebula clouds */
+  #page::before,#page::after{
+    content:"";
+    position:fixed;
+    inset:-20% -20% -20% -20%;
+    z-index:0;
+    pointer-events:none;
+  }
+  #page::before{
+    background:
+      radial-gradient(46% 40% at 78% 12%,var(--neb-a),transparent 70%),
+      radial-gradient(50% 45% at 12% 30%,var(--neb-b),transparent 72%),
+      radial-gradient(60% 55% at 60% 92%,var(--neb-c),transparent 75%);
+    animation:drift 68s ease-in-out infinite alternate;
+  }
+  #page::after{
+    background:radial-gradient(40% 34% at 25% 78%,var(--neb-c),transparent 70%);
+    animation:drift 90s ease-in-out infinite alternate-reverse;
+  }
+  @keyframes drift{
+    from{transform:translate3d(0,0,0) scale(1)}
+    to{transform:translate3d(-3%,2%,0) scale(1.08)}
+  }
+
+  #stars{
+    position:fixed;inset:0;z-index:1;
+    pointer-events:none;
+  }
+
+  .wrap{
+    position:relative;
+    z-index:2;
+    max-width:1080px;
+    margin-inline:auto;
+    padding-inline:clamp(20px,5vw,48px);
+  }
+
+  /* ---------- shared type ---------- */
+  .eyebrow{
+    font-size:.9rem;
+    font-weight:500;
+    color:var(--accent);
+    margin:0 0 1.1rem;
+    display:flex;align-items:center;gap:.7rem;
+  }
+  .eyebrow::before{
+    content:"";width:34px;height:1px;background:var(--accent);opacity:.6;flex:none;
+  }
+  .eyebrow .ix{
+    font-family:"Space Mono","SFMono-Regular",ui-monospace,monospace;
+    font-size:.82em;letter-spacing:.1em;opacity:.8;
+  }
+  .eyebrow.hero{
+    font-family:"Space Mono","SFMono-Regular",ui-monospace,monospace;
+    font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;
+    direction:ltr;justify-content:flex-end;
+  }
+  h1,h2,h3{font-family:"Changa","Tajawal",system-ui,sans-serif;font-weight:700;text-wrap:balance;line-height:1.2;margin:0}
+  section{padding-block:clamp(84px,13vh,150px);position:relative;z-index:2}
+  .s-head{margin-bottom:clamp(2.4rem,5vw,3.6rem)}
+  .s-head h2{font-size:clamp(1.9rem,4.6vw,2.9rem)}
+  .s-head p{color:var(--ink-soft);max-width:52ch;margin:.9rem 0 0;font-weight:300}
+
+  a{color:inherit}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
+
+  /* ---------- hero ---------- */
+  #hero{
+    min-height:100svh;
+    display:flex;flex-direction:column;justify-content:center;
+    padding-block:120px 90px;
+  }
+  #hero::before{
+    content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+    background:radial-gradient(60% 60% at 72% 46%,var(--vignette),transparent 78%);
+  }
+  .hero-name{
+    font-size:clamp(3.1rem,12vw,7rem);
+    letter-spacing:-.01em;
+    margin:0;
+    text-shadow:0 0 40px var(--glow);
+  }
+  .hero-role{
+    font-family:"Space Mono",ui-monospace,monospace;
+    direction:ltr;text-align:right;
+    color:var(--ink-soft);
+    font-size:clamp(.9rem,2.2vw,1.05rem);
+    letter-spacing:.2em;text-transform:uppercase;
+    margin:.4rem 0 1.7rem;
+  }
+  .hero-thesis{
+    font-size:clamp(1.15rem,2.9vw,1.55rem);
+    font-weight:300;
+    max-width:34ch;
+    color:var(--ink);
+    margin:0 0 2.4rem;
+  }
+  .hero-thesis b{font-weight:500;color:var(--accent)}
+  .cta{display:flex;flex-wrap:wrap;gap:.85rem}
+  .btn{
+    display:inline-flex;align-items:center;gap:.5rem;
+    font-size:.9rem;font-weight:500;
+    padding:.85rem 1.4rem;
+    border:1px solid var(--line);
+    border-radius:7px;
+    text-decoration:none;
+    color:var(--ink);
+    background:color-mix(in srgb,var(--bg-raised) 55%,transparent);
+    backdrop-filter:blur(6px);
+    transition:transform .25s ease,border-color .25s ease,background .25s ease,box-shadow .25s ease;
+  }
+  .btn:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 10px 30px -12px var(--glow)}
+  .btn--primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  :root[data-theme="dark"] .btn--primary,
+  :root:not([data-theme="light"]) .btn--primary{color:#06080f}
+  @media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .btn--primary{color:#fff}}
+  .btn svg{width:14px;height:14px;flex:none}
+
+  .scroll-cue{
+    margin-top:clamp(3rem,8vh,6rem);
+    font-family:"Space Mono",ui-monospace,monospace;
+    font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--ink-soft);
+    display:flex;align-items:center;gap:.6rem;
+  }
+  .scroll-cue span{width:1px;height:44px;background:linear-gradient(var(--accent),transparent);display:block}
+
+  /* ---------- telemetry ---------- */
+  .telem{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:1px;background:var(--line);
+    border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  }
+  .telem div{
+    background:color-mix(in srgb,var(--bg-raised) 86%,transparent);
+    padding:1.5rem 1.4rem;
+  }
+  .telem .n{
+    font-family:"Space Mono",ui-monospace,monospace;
+    font-size:clamp(1.5rem,3.6vw,2.1rem);
+    color:var(--ink);font-weight:700;
+    font-variant-numeric:tabular-nums;direction:ltr;
+  }
+  .telem .l{
+    display:block;margin-top:.35rem;
+    font-size:.8rem;color:var(--ink-soft);font-weight:300;
+  }
+
+  /* ---------- about body ---------- */
+  .about-body{display:flex;flex-direction:column;gap:1.4rem;max-width:62ch;margin-top:2.4rem}
+  .about-body p{margin:0;color:var(--ink-soft);font-weight:300;font-size:1.05rem;line-height:1.85}
+  .about-body b{color:var(--accent);font-weight:600}
+
+  /* ---------- projects ---------- */
+  .grid{display:grid;gap:1.4rem;grid-template-columns:1fr}
+  @media(min-width:760px){.grid{grid-template-columns:1fr 1fr}}
+  .card{
+    position:relative;
+    background:color-mix(in srgb,var(--bg-raised) 88%,transparent);
+    backdrop-filter:blur(6px);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:1.8rem 1.7rem 1.5rem;
+    display:flex;flex-direction:column;gap:.9rem;
+    transition:transform .3s ease,border-color .3s ease,box-shadow .3s ease;
+  }
+  .card:hover{transform:translateY(-5px);border-color:var(--accent);box-shadow:0 22px 50px -22px var(--glow)}
+  .card-top{
+    display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
+    font-size:.8rem;
+  }
+  .card-top .id{
+    color:var(--accent);direction:ltr;
+    font-family:"Space Mono",ui-monospace,monospace;letter-spacing:.1em;
+  }
+  .card-top .tag{color:var(--ink-soft);text-align:start;font-weight:300}
+  .card h3{font-size:1.28rem}
+  .card p{margin:0;color:var(--ink-soft);font-size:.98rem;font-weight:300}
+  .chips{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.2rem}
+  .chip{
+    font-size:.76rem;font-weight:500;
+    color:var(--metric);border:1px solid color-mix(in srgb,var(--metric) 45%,transparent);
+    padding:.28rem .6rem;border-radius:999px;
+    font-variant-numeric:tabular-nums;
+  }
+  .tech{
+    display:flex;flex-wrap:wrap;gap:.4rem 1rem;font-size:.8rem;color:var(--ink-soft);
+    direction:ltr;justify-content:flex-end;
+    font-family:"Space Mono",ui-monospace,monospace;
+  }
+  .tech span{white-space:nowrap}
+  .card-link{
+    margin-top:auto;padding-top:.4rem;
+    font-size:.85rem;font-weight:500;
+    color:var(--accent);text-decoration:none;display:inline-flex;gap:.4rem;align-items:center;
+    align-self:flex-start;
+  }
+  .card-link:hover{text-decoration:underline}
+  .also{margin-top:1.8rem;color:var(--ink-soft);font-weight:300;font-size:.98rem}
+  .also b{color:var(--ink);font-weight:500}
+
+  /* ---------- skills ---------- */
+  .skills{display:grid;gap:1.2rem;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+  .skill{
+    background:color-mix(in srgb,var(--bg-raised) 82%,transparent);
+    border:1px solid var(--line);border-radius:12px;padding:1.4rem 1.4rem 1.5rem;
+  }
+  .skill h3{font-size:1rem;color:var(--accent);margin-bottom:.9rem;font-weight:600}
+  .skill ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:.45rem}
+  .skill li{
+    font-size:.8rem;font-weight:400;
+    border:1px solid var(--line);border-radius:6px;padding:.32rem .6rem;
+    color:var(--ink);
+  }
+
+  /* ---------- path / timeline ---------- */
+  .path{position:relative;display:flex;flex-direction:column;gap:2.6rem;padding-inline-start:1.6rem}
+  .path::before{content:"";position:absolute;inset-block:6px;inset-inline-start:0;width:2px;background:linear-gradient(var(--accent),transparent)}
+  .step{position:relative}
+  .step::before{
+    content:"";position:absolute;inset-inline-start:-1.6rem;top:.55rem;
+    width:11px;height:11px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 22%,transparent);
+    transform:translateX(50%);
+  }
+  .step .yr{font-family:"Space Mono",ui-monospace,monospace;font-size:.78rem;color:var(--accent);letter-spacing:.1em;direction:ltr}
+  .step h3{font-size:1.15rem;margin:.35rem 0 .3rem}
+  .step p{margin:0;color:var(--ink-soft);font-weight:300;font-size:.95rem}
+
+  /* ---------- contact ---------- */
+  #contact .big{font-size:clamp(2rem,6vw,3.4rem);margin-bottom:1.8rem}
+  .links{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+  .links a{
+    display:flex;justify-content:space-between;align-items:center;gap:1rem;
+    padding:1.15rem .2rem;border-bottom:1px solid var(--line);
+    text-decoration:none;color:var(--ink);font-size:1rem;font-weight:400;
+    transition:padding-inline .25s ease,color .25s ease;
+  }
+  .links a:hover{padding-inline-start:1rem;color:var(--accent)}
+  .links .v{
+    color:var(--ink-soft);direction:ltr;font-size:.82rem;
+    font-family:"Space Mono",ui-monospace,monospace;
+  }
+  .links a:hover .v{color:var(--accent)}
+
+  footer{
+    position:relative;z-index:2;
+    padding:3rem 0 4rem;color:var(--ink-soft);
+    font-size:.82rem;font-weight:300;
+    display:flex;flex-wrap:wrap;gap:.6rem 1.4rem;justify-content:space-between;
+    border-top:1px solid var(--line);
+  }
+  footer #foot{font-family:"Space Mono",ui-monospace,monospace;letter-spacing:.04em;direction:ltr}
+
+  /* ---------- spine nav ---------- */
+  .spine{
+    position:fixed;inset-inline-end:26px;top:0;bottom:0;z-index:3;
+    display:none;flex-direction:column;justify-content:center;gap:1.1rem;
+  }
+  @media(min-width:1180px){.spine{display:flex}}
+  .spine a{
+    --d:7px;width:var(--d);height:var(--d);border-radius:50%;
+    background:var(--line);position:relative;transition:background .25s ease,transform .25s ease;
+  }
+  .spine a::after{
+    content:attr(data-label);position:absolute;inset-inline-end:calc(100% + 12px);top:50%;
+    transform:translateY(-50%);white-space:nowrap;
+    font-size:.75rem;
+    color:var(--ink-soft);opacity:0;transition:opacity .25s ease;
+  }
+  .spine a:hover{background:var(--accent)}
+  .spine a:hover::after{opacity:1}
+  .spine a.active{background:var(--accent);transform:scale(1.5)}
+
+  /* ---------- theme toggle ---------- */
+  .toggle{
+    position:fixed;inset-inline-start:20px;top:20px;z-index:4;
+    width:42px;height:42px;border-radius:50%;
+    border:1px solid var(--line);
+    background:color-mix(in srgb,var(--bg-raised) 65%,transparent);
+    backdrop-filter:blur(8px);
+    color:var(--ink);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    font-size:1rem;transition:transform .3s ease,border-color .3s ease;
+  }
+  .toggle:hover{transform:rotate(20deg);border-color:var(--accent)}
+
+  /* ---------- reveal (only when JS confirmed running) ---------- */
+  .js [data-reveal]{opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease}
+  .js [data-reveal].is-in{opacity:1;transform:none}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important}
+    html{scroll-behavior:auto}
+    [data-reveal]{opacity:1;transform:none}
+    #page::before,#page::after{animation:none}
+  }
+</style>
+
+<div id="page" lang="ar">
+  <canvas id="stars" aria-hidden="true"></canvas>
+
+  <button class="toggle" id="themeBtn" type="button" aria-label="تبديل الوضع الفاتح والغامق">☾</button>
+
+  <nav class="spine" aria-label="أقسام الصفحة">
+    <a href="#hero"    data-label="الرئيسية"></a>
+    <a href="#about"   data-label="عن لمى"></a>
+    <a href="#work"    data-label="المشاريع"></a>
+    <a href="#skills"  data-label="المهارات"></a>
+    <a href="#path"    data-label="المسيرة"></a>
+    <a href="#contact" data-label="تواصل"></a>
+  </nav>
+
+  <!-- ================= HERO ================= -->
+  <header id="hero" class="wrap">
+    <p class="eyebrow hero">AI ENGINEER · JEDDAH, SA</p>
+    <h1 class="hero-name">لمى الفايدي</h1>
+    <p class="hero-role">Artificial Intelligence Engineer</p>
+    <p class="hero-thesis">تعلّم عميق لـ<b>الرؤية الحاسوبية</b> و<b>معالجة اللغة العربية</b>. آخر مشاريعي شخّصت أمراض شبكية العين وربطت التشخيص بتوصيات من نموذج لغوي.</p>
+    <div class="cta">
+      <a class="btn btn--primary" href="#work">المشاريع الي اشتغلت عليها</a>
+      <a class="btn" href="https://github.com/DeepNova0" target="_blank" rel="noopener">GitHub
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49l-.01-1.7c-2.78.62-3.37-1.22-3.37-1.22-.46-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.36 1.12 2.94.85.09-.67.35-1.12.63-1.38-2.22-.26-4.55-1.14-4.55-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05a9.3 9.3 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.79-4.57 5.05.36.32.68.94.68 1.9l-.01 2.82c0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"/></svg>
+      </a>
+      <a class="btn" href="https://www.linkedin.com/in/lama-al-fiydi-16743528b" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" id="cvBtn" href="#" target="_blank" rel="noopener">السيرة الذاتية (PDF)</a>
+    </div>
+    <div class="scroll-cue" aria-hidden="true"><span></span> SCROLL</div>
+  </header>
+
+  <!-- ================= TELEMETRY ================= -->
+  <section class="wrap" aria-label="أرقام سريعة" style="padding-block:0" data-reveal>
+    <div class="telem">
+      <div><span class="n">4.50<span style="color:var(--ink-soft);font-size:.6em">/5.0</span></span><span class="l">معدل التخرّج · جامعة جدة</span></div>
+      <div><span class="n">98.75%</span><span class="l">أعلى دقة تشخيص (صور CFP)</span></div>
+      <div><span class="n">1,000,000</span><span class="l">تقييم دُرّب عليه نظام ترشيح الأفلام</span></div>
+      <div><span class="n">×4.84</span><span class="l">تسريع في الحوسبة المتوازية</span></div>
+    </div>
+  </section>
+
+  <!-- ================= ABOUT ================= -->
+  <section id="about" class="wrap">
+    <div class="s-head" data-reveal>
+      <p class="eyebrow"><span class="ix">01</span> عن لمى</p>
+      <h2>مهندسة ذكاء اصطناعي، خريجة جامعة جدة</h2>
+      <p>تخرّجت من جامعة جدة تخصص ذكاء اصطناعي بمعدل 4.50 من 5، وأغلب شغلي في التعلّم العميق للصور ومعالجة النص العربي.</p>
+    </div>
+    <div class="about-body">
+      <p data-reveal>
+        في مشروع التخرّج <b>OptiScan</b> اشتغلت على جزء التشخيص: نماذج VGG19 تصنّف صور OCT و CFP لأمراض الشبكية، ووصلت الدقة 98.75% على CFP و 95.75% على OCT. بعدها ربطنا النتيجة بنموذج GPT-4 Turbo يكتب توصيات مخصّصة، ونموذج ثاني يراجعها قبل ما تُعرض. البحث حاليًا تحت الإجراء للنشر.
+      </p>
+      <p data-reveal>
+        قبله اشتغلت على توقّع مواقع الآيات القرآنية (N-gram و LSTM مع استرجاع TF-IDF)، نظام ترشيح أفلام (NCF مع BiLSTM على مليون تقييم)، وحوسبة متوازية بـ C++. اللي يهمّني في أي مشروع: يكون له استخدام واضح، وأشتغل على التفاصيل اللي بعد رقم الدقة — زي مراجعة مخرجات النموذج اللغوي.
+      </p>
+    </div>
+  </section>
+
+  <!-- ================= WORK ================= -->
+  <section id="work" class="wrap">
+    <div class="s-head" data-reveal>
+      <p class="eyebrow"><span class="ix">02</span> المشاريع</p>
+      <h2>سجلّ المشاريع</h2>
+      <p>مشاريع مختارة من ‏12 مستودع على GitHub — الأرقام كلها من التقارير الفعلية.</p>
+    </div>
+
+    <div class="grid">
+
+      <article class="card" data-reveal>
+        <div class="card-top"><span class="id">OBS-01</span><span class="tag">مشروع التخرّج · ورقة بحثية تحت الإجراء للنشر</span></div>
+        <h3>OptiScan — تشخيص أمراض الشبكية وتوصيات العناية</h3>
+        <p>نظام كامل: يستقبل صورة OCT أو CFP، يحدّد نوعها تلقائيًا، يشخّص المرض، وبعدها نموذج لغوي كبير يعطي توصيات علاجية ونمط حياة مخصّصة — ونموذج ثانٍ يراجع دقّة الطب والأمان قبل ما توصل للمستخدم. مربوط بموقع ويب، والبحث حاليًا تحت الإجراء للنشر.</p>
+        <div class="chips">
+          <span class="chip">CFP 98.75%</span><span class="chip">OCT 95.75%</span><span class="chip">F1 98.5 / 95.5</span><span class="chip">~97K صورة</span>
+        </div>
+        <div class="tech"><span>VGG19</span><span>TensorFlow</span><span>GPT-4 Turbo API</span><span>OpenCV · CLAHE</span><span>Flask · ngrok</span></div>
+        <a class="card-link" href="https://github.com/DeepNova0/Intelligent-Retinal-Diagnosis-and-Care-Recommendations-System" target="_blank" rel="noopener">عرض على GitHub ↗</a>
+      </article>
+
+      <article class="card" data-reveal>
+        <div class="card-top"><span class="id">OBS-02</span><span class="tag">معالجة اللغة الطبيعية</span></div>
+        <h3>مساعد القرآن الكريم — توقّع وتحديد موقع الآية</h3>
+        <p>تكتب جزء من الآية، والنظام يكمّلها ويطلّع لك موقعها بالضبط: اسم السورة، رقم الآية، ورقم الصفحة — حتى لو مدخلك ناقص أو ما تعرف اسم السورة.</p>
+        <div class="chips">
+          <span class="chip">6,236 آية</span><span class="chip">114 سورة</span><span class="chip">N-gram + LSTM</span>
+        </div>
+        <div class="tech"><span>Python</span><span>LSTM</span><span>TF-IDF</span><span>N-gram (3)</span><span>معالجة نص عربي</span></div>
+        <a class="card-link" href="https://github.com/DeepNova0/Assistant-to-the-Holy-Quran-NLP-Based-Verse-Prediction" target="_blank" rel="noopener">عرض على GitHub ↗</a>
+      </article>
+
+      <article class="card" data-reveal>
+        <div class="card-top"><span class="id">OBS-03</span><span class="tag">نظام ترشيح</span></div>
+        <h3>نظام ترشيح أفلام — NCF مع BiLSTM</h3>
+        <p>نظام ترشيح مبني على الـ deep learning: طبقات embedding للمستخدم والفيلم، وطبقة BiLSTM تمسك التسلسل والسياق، مع dropout و batch normalization ضد الـ overfitting — على مليون تقييم.</p>
+        <div class="chips">
+          <span class="chip">1M تقييم</span><span class="chip">Val MAE 0.159</span><span class="chip">Val MSE 0.044</span>
+        </div>
+        <div class="tech"><span>TensorFlow</span><span>BiLSTM</span><span>Embeddings</span><span>Neural Collaborative Filtering</span></div>
+        <a class="card-link" href="https://github.com/DeepNova0/Movie-Recommendation-System-NCF-BiLSTM-" target="_blank" rel="noopener">عرض على GitHub ↗</a>
+      </article>
+
+      <article class="card" data-reveal>
+        <div class="card-top"><span class="id">OBS-04</span><span class="tag">حوسبة عالية الأداء</span></div>
+        <h3>الحوسبة المتوازية — OpenMP و MPI</h3>
+        <p>محاكاة Simulated Annealing لمشكلة البائع المتجوّل (TSP) بـ OpenMP، وحل معادلة الحرارة ثنائية الأبعاد بـ MPI مع Halo Exchange، مع قياس التسريع والكفاءة والتوسّع.</p>
+        <div class="chips">
+          <span class="chip">Speedup ×4.84</span><span class="chip">8 عمليات</span><span class="chip">شبكة 2048²</span>
+        </div>
+        <div class="tech"><span>C++</span><span>OpenMP</span><span>MPI</span><span>Benchmarking</span></div>
+        <a class="card-link" href="https://github.com/DeepNova0/Parallel-Computing-OpenMP-MPI" target="_blank" rel="noopener">عرض على GitHub ↗</a>
+      </article>
+
+      <article class="card" data-reveal>
+        <div class="card-top"><span class="id">OBS-05</span><span class="tag">تعلّم عميق</span></div>
+        <h3>تصنيف صور صامد ضد التشويش والضوضاء</h3>
+        <p>شبكة CNN مخصّصة تصنّف صور القطط والكلاب حتى لو فيها ضبابية حركة (motion blur) أو ضوضاء ملح وفلفل — مع مرحلة معالجة مسبقة وإزالة تشويش قبل التصنيف.</p>
+        <div class="chips">
+          <span class="chip">Custom CNN</span><span class="chip">Denoising</span>
+        </div>
+        <div class="tech"><span>TensorFlow</span><span>OpenCV</span><span>Image Preprocessing</span></div>
+        <a class="card-link" href="https://github.com/DeepNova0/Robust-image-classification-blur-noise" target="_blank" rel="noopener">عرض على GitHub ↗</a>
+      </article>
+
+      <article class="card" data-reveal>
+        <div class="card-top"><span class="id">OBS-06</span><span class="tag">تعلّم آلة</span></div>
+        <h3>تحليل سوق الكتاب العربي</h3>
+        <p>على بيانات Jamalon (أكثر من 8,000 كتاب): تنبؤ بالفئات الأكثر مبيعًا ومقارنة نموذجين — KNN مقابل SVM — مع معالجة القيم الناقصة، ترميز one-hot، واختيار قيمة k عبر التحقق المتقاطع.</p>
+        <div class="chips">
+          <span class="chip">+8,000 كتاب</span><span class="chip">KNN · k=21</span><span class="chip">SVM</span><span class="chip">10-fold CV</span>
+        </div>
+        <div class="tech"><span>Python</span><span>Scikit-learn</span><span>Pandas</span><span>KNN · SVM</span></div>
+        <a class="card-link" href="https://github.com/DeepNova0/Arabic-book-market-analysis" target="_blank" rel="noopener">عرض على GitHub ↗</a>
+      </article>
+
+    </div>
+
+    <p class="also" data-reveal>
+      <b>أعمال أخرى:</b> دراسة بحثية عن الحضور والانغماس في الواقع الافتراضي وأثرهما النفسي، تطبيق «BE SMART» لإدارة المنزل الذكي (تحليل متطلبات ودراسة جدوى)، ومشروع إدارة مشاريع برمجية لتطبيق نقل جامعي (ميزانية، تحليل مخاطر، وجدولة).
+    </p>
+  </section>
+
+  <!-- ================= SKILLS ================= -->
+  <section id="skills" class="wrap">
+    <div class="s-head" data-reveal>
+      <p class="eyebrow"><span class="ix">03</span> المهارات</p>
+      <h2>الأدوات اللي أشتغل فيها</h2>
+    </div>
+    <div class="skills">
+      <div class="skill" data-reveal>
+        <h3>لغات البرمجة</h3>
+        <ul><li>Python</li><li>C++</li><li>Java</li></ul>
+      </div>
+      <div class="skill" data-reveal>
+        <h3>تعلّم الآلة والتعلّم العميق</h3>
+        <ul><li>TensorFlow</li><li>Keras</li><li>Scikit-learn</li><li>CNN</li><li>BiLSTM / LSTM</li><li>Transfer Learning</li></ul>
+      </div>
+      <div class="skill" data-reveal>
+        <h3>الذكاء التوليدي و LLMs</h3>
+        <ul><li>GPT-4 Turbo API</li><li>Prompt Engineering</li><li>تقييم آلي / حواجز أمان</li><li>استرجاع TF-IDF</li></ul>
+      </div>
+      <div class="skill" data-reveal>
+        <h3>الرؤية الحاسوبية</h3>
+        <ul><li>OpenCV</li><li>CLAHE</li><li>إزالة تشويش</li><li>تصنيف صور طبية</li></ul>
+      </div>
+      <div class="skill" data-reveal>
+        <h3>معالجة اللغة الطبيعية</h3>
+        <ul><li>TF-IDF</li><li>N-gram</li><li>LSTM</li><li>نص عربي</li></ul>
+      </div>
+      <div class="skill" data-reveal>
+        <h3>الحوسبة المتوازية</h3>
+        <ul><li>OpenMP</li><li>MPI</li><li>Halo Exchange</li><li>قياس أداء وتوسّع</li></ul>
+      </div>
+      <div class="skill" data-reveal>
+        <h3>أدوات</h3>
+        <ul><li>Git / GitHub</li><li>Flask</li><li>ngrok</li><li>Unity</li></ul>
+      </div>
+      <div class="skill" data-reveal>
+        <h3>اللغات</h3>
+        <ul><li>العربية — الأم</li><li>English — professional</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PATH ================= -->
+  <section id="path" class="wrap">
+    <div class="s-head" data-reveal>
+      <p class="eyebrow"><span class="ix">04</span> المسيرة</p>
+      <h2>التعليم والشهادات</h2>
+    </div>
+    <div class="path">
+      <div class="step" data-reveal>
+        <span class="yr">2021 — 2026</span>
+        <h3>بكالوريوس الذكاء الاصطناعي — جامعة جدة</h3>
+        <p>تخرّجت 2026 · معدل تراكمي 4.50 / 5.0 · شهادة تفوّق أكاديمي · كلية علوم وهندسة الحاسب، قسم علوم الحاسب والذكاء الاصطناعي.</p>
+      </div>
+      <div class="step" data-reveal>
+        <span class="yr">2026</span>
+        <h3>Advanced Artificial Intelligence — بامتياز · KAUST</h3>
+        <p>برنامج مكثّف 80 ساعة في تعلّم الآلة، التعلّم العميق، الرؤية الحاسوبية، والتعلّم غير الخاضع للإشراف — جامعة الملك عبدالله للعلوم والتقنية.</p>
+      </div>
+      <div class="step" data-reveal>
+        <span class="yr">2025</span>
+        <h3>Generative AI with Large Language Models</h3>
+        <p>شهادة من Amazon Web Services و DeepLearning.AI في بناء تطبيقات النماذج اللغوية الكبيرة.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT ================= -->
+  <section id="contact" class="wrap">
+    <p class="eyebrow" data-reveal><span class="ix">05</span> تواصل</p>
+    <h2 class="big" data-reveal>نتواصل؟</h2>
+    <div class="links" data-reveal>
+      <a href="mailto:lamaaa.2134@gmail.com"><span class="k">البريد الإلكتروني</span><span class="v">lamaaa.2134@gmail.com</span></a>
+      <a href="tel:+966564986491"><span class="k">الجوال</span><span class="v">+966 56 498 6491</span></a>
+      <a href="https://github.com/DeepNova0" target="_blank" rel="noopener"><span class="k">GitHub</span><span class="v">github.com/DeepNova0</span></a>
+      <a href="https://www.linkedin.com/in/lama-al-fiydi-16743528b" target="_blank" rel="noopener"><span class="k">LinkedIn</span><span class="v">in/lama-al-fiydi</span></a>
+      <a id="cvBtn2" href="#" target="_blank" rel="noopener"><span class="k">السيرة الذاتية (PDF)</span><span class="v">Google Drive</span></a>
+    </div>
+  </section>
+
+  <footer class="wrap">
+    <span>لمى الفايدي · مهندسة ذكاء اصطناعي · جدة، السعودية</span>
+    <span id="foot">© 2026</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  root.classList.add('js');
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- theme ---------- */
+  var btn=document.getElementById('themeBtn');
+  function stored(){try{return localStorage.getItem('lama-theme');}catch(e){return null;}}
+  function currentDark(){
+    var t=root.getAttribute('data-theme');
+    if(t)return t==='dark';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  function paintBtn(){btn.textContent=currentDark()?'☀':'☾';}
+  var s=stored(); if(s){root.setAttribute('data-theme',s);}
+  paintBtn();
+  btn.addEventListener('click',function(){
+    var next=currentDark()?'light':'dark';
+    root.setAttribute('data-theme',next);
+    try{localStorage.setItem('lama-theme',next);}catch(e){}
+    paintBtn(); starColor=readStar(); if(reduce)drawStatic();
+  });
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(){
+    if(!root.getAttribute('data-theme')){paintBtn(); starColor=readStar(); if(reduce)drawStatic();}
+  });
+
+  /* ---------- CV placeholder ---------- */
+  var CV_URL="https://drive.google.com/file/d/1mkV3hOK_S2t2tRcQJU6mrZaHsIK-vGME/view?usp=sharing";
+  ['cvBtn','cvBtn2'].forEach(function(id){
+    var el=document.getElementById(id); if(!el)return;
+    if(CV_URL){el.href=CV_URL;}
+    else{
+      el.addEventListener('click',function(ev){
+        ev.preventDefault();
+        alert('رابط السيرة الذاتية لسه ما انضاف. حطّي رابط Google Drive في المتغيّر CV_URL داخل الكود.');
+      });
+    }
+  });
+
+  /* ---------- starfield ---------- */
+  var cv=document.getElementById('stars');
+  var ctx=cv.getContext('2d');
+  var w=0,h=0,dpr=Math.min(window.devicePixelRatio||1,2);
+  var stars=[],shooters=[],last=0,nextShot=0;
+
+  function readStar(){
+    var c=getComputedStyle(root).getPropertyValue('--star').trim();
+    return c||'rgba(234,239,255,.9)';
+  }
+  var starColor=readStar();
+
+  function build(){
+    var count=Math.round(Math.min(w*h/1500,260));
+    stars=[];
+    for(var i=0;i<count;i++){
+      stars.push({
+        x:Math.random(),y:Math.random(),
+        z:0.25+Math.random()*0.75,
+        r:Math.random()*1.3+0.25,
+        tw:Math.random()*Math.PI*2,
+        ts:0.6+Math.random()*1.6
+      });
+    }
+  }
+  function resize(){
+    w=cv.clientWidth=window.innerWidth;
+    h=cv.clientHeight=window.innerHeight;
+    cv.width=w*dpr; cv.height=h*dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    build();
+    if(reduce)drawStatic();
+  }
+  function paintStars(t){
+    ctx.clearRect(0,0,w,h);
+    for(var i=0;i<stars.length;i++){
+      var st=stars[i];
+      var a=0.35+0.65*(0.5+0.5*Math.sin(t*0.001*st.ts+st.tw));
+      a*=st.z;
+      ctx.globalAlpha=a;
+      ctx.fillStyle=starColor;
+      ctx.beginPath();
+      ctx.arc(st.x*w,st.y*h,st.r*(0.6+st.z),0,6.2832);
+      ctx.fill();
+    }
+    ctx.globalAlpha=1;
+  }
+  function drawStatic(){ paintStars(1200); }
+
+  function tick(t){
+    if(!last)last=t;
+    var dt=Math.min(t-last,60); last=t;
+
+    ctx.clearRect(0,0,w,h);
+    for(var i=0;i<stars.length;i++){
+      var st=stars[i];
+      st.y+=dt*0.000018*st.z;
+      st.x-=dt*0.000010*st.z;
+      if(st.y>1.02){st.y=-0.02;st.x=Math.random();}
+      if(st.x<-0.02){st.x=1.02;}
+      var a=0.35+0.65*(0.5+0.5*Math.sin(t*0.001*st.ts+st.tw));
+      a*=st.z;
+      ctx.globalAlpha=a; ctx.fillStyle=starColor;
+      ctx.beginPath();
+      ctx.arc(st.x*w,st.y*h,st.r*(0.6+st.z),0,6.2832);
+      ctx.fill();
+    }
+    ctx.globalAlpha=1;
+
+    /* shooting stars */
+    if(t>nextShot){
+      nextShot=t+7000+Math.random()*7000;
+      shooters.push({x:0.1+Math.random()*0.7,y:Math.random()*0.35,
+        vx:-(0.18+Math.random()*0.12),vy:(0.10+Math.random()*0.08),life:0});
+    }
+    for(var j=shooters.length-1;j>=0;j--){
+      var sh=shooters[j]; sh.life+=dt;
+      var p=sh.life/900;
+      if(p>=1){shooters.splice(j,1);continue;}
+      var cx=sh.x*w, cy=sh.y*h;
+      var tx=(sh.x-sh.vx*0.06)*w, ty=(sh.y-sh.vy*0.06)*h;
+      var g=ctx.createLinearGradient(cx,cy,tx,ty);
+      var fade=Math.sin(p*Math.PI);
+      g.addColorStop(0,starColor);
+      g.addColorStop(1,'transparent');
+      ctx.strokeStyle=g; ctx.globalAlpha=fade; ctx.lineWidth=1.6;
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(tx,ty); ctx.stroke();
+      ctx.globalAlpha=1;
+      sh.x+=sh.vx*dt*0.001; sh.y+=sh.vy*dt*0.001;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  window.addEventListener('resize',resize,{passive:true});
+  resize();
+  if(!reduce)requestAnimationFrame(tick);
+
+  /* ---------- reveal ---------- */
+  var revealEls=document.querySelectorAll('[data-reveal]');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(en){
+      en.forEach(function(e){ if(e.isIntersecting){e.target.classList.add('is-in');io.unobserve(e.target);} });
+    },{threshold:0.12,rootMargin:'0px 0px -8% 0px'});
+    revealEls.forEach(function(el,i){
+      el.style.transitionDelay=(i%4*70)+'ms';
+      io.observe(el);
+    });
+  }else{
+    revealEls.forEach(function(el){el.classList.add('is-in');});
+  }
+
+  /* ---------- spine active ---------- */
+  var spineLinks=Array.prototype.slice.call(document.querySelectorAll('.spine a'));
+  var secs=spineLinks.map(function(a){return document.querySelector(a.getAttribute('href'));});
+  var sIo=new IntersectionObserver(function(en){
+    en.forEach(function(e){
+      if(e.isIntersecting){
+        var idx=secs.indexOf(e.target);
+        spineLinks.forEach(function(l,i){l.classList.toggle('active',i===idx);});
+      }
+    });
+  },{threshold:0.5});
+  secs.forEach(function(s){if(s)sIo.observe(s);});
+
+  document.getElementById('foot').textContent='© '+new Date().getFullYear();
+})();
+</script>
